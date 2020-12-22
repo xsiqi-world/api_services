@@ -18,6 +18,7 @@ use Illuminate\Http\Request;
 // });
 
 // 用户验证
-Route::post('register', 'Api\UserController@register');
-Route::post('login', 'Api\UserController@login');
-Route::get('logout', 'Api\UserController@logout');
+Route::post('register', 'Api\UserController@register');//注册
+Route::post('login', 'Api\UserController@login');//登录
+Route::get('logout', 'Api\UserController@logout');//退出
+Route::get('user', 'Api\UserController@getAuthUser');//用户信息
