@@ -9,7 +9,7 @@ use Tymon\JWTAuth\Exceptions\TokenExpiredException;
 use Tymon\JWTAuth\Exceptions\TokenInvalidException;
 use Tymon\JWTAuth\Facades\JWTAuth;
 
-class RefreshToken
+class ValidateToken
 {
     protected $route;
 
@@ -34,7 +34,7 @@ class RefreshToken
         $uri = $this->route->uri();//跳转路由
         $user = [];
         if (in_array($uri, $route)) {
-            if ($request->headers->get('Authorization', false) && JWTAuth::parseToken()->authenticate()){
+            if ($request->headers->get('Authorization', false) && JWTAuth::parseToken()->authenticate()) {
                 $user = JWTAuth::parseToken()->authenticate();
                 $request->attributes->add(['userInfo' => $user]);//添加参数
             }
@@ -42,7 +42,7 @@ class RefreshToken
         }
 
         try {
-            if (!$request->headers->get('Authorization', false)){
+            if (!$request->headers->get('Authorization', false)) {
                 return response()->json([
                     'code' => 300400,
                     'message' => 'invalid token'
