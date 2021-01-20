@@ -20,7 +20,7 @@ class ArticleController extends Controller
             ->simplePaginate(15)
             ->toArray();
 
-        $data = $category['data'];
+        $data['data'] = $category['data'];
         $data['total'] = $category['to'];
         return $this->success($data);
     }
@@ -30,13 +30,21 @@ class ArticleController extends Controller
      *
      * @return void
      */
-    public function articleList () {
-        $category = Article::getInstance()->select('category.name as category_name', 'category.icon', 'blog_article.title', 'blog_article.description', 'blog_article.access_num', DB::raw("date_format(from_unixtime(create_time),'%Y-%m-%d %H:%i:%s') as create_time"))
+    public function articleList (Request $request) {
+        $this->validate($request, [
+            'category_id' => 'nullable|integer'
+        ]);
+        $categoryId = $request['category_id'] ?? '';
+
+        $category = Article::getInstance()->select('blog_article.id', 'category.name as category_name', 'category.icon', 'blog_article.title', 'blog_article.description', 'blog_article.access_num', DB::raw("date_format(from_unixtime(create_time),'%Y-%m-%d %H:%i:%s') as create_time"))
             ->leftJoin('blog_category as category', 'blog_article.category_id', '=', 'category.id')
+            ->when(!empty($categoryId), function ($query) use ($categoryId) {
+                return $query->where('blog_article.category_id', $categoryId);
+            })
             ->simplePaginate(15)
             ->toArray();
 
-        $data = $category['data'];
+        $data['data'] = $category['data'];
         $data['total'] = $category['to'];
         return $this->success($data);
     }
