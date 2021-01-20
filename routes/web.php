@@ -23,4 +23,11 @@ Route::prefix('api/')->group(function () {
     Route::post('admin/register', 'Api\IndexController@register');//注册
     Route::post('admin/login', 'Api\IndexController@login');//登录
 
+    Route::get('admin/article/category', 'Api\ArticleController@categoryList');//分类列表
+    // Route::get('admin/article/category', 'Api\ArticleController@categoryList');//分类文章列表
+    Route::get('admin/article', 'Api\ArticleController@articleList');//文章列表
+    Route::get('admin/article/info', 'Api\ArticleController@articleInfo');//文章详情
+    Route::get('admin/article/add', 'Api\ArticleController@articleAdd');//添加文章
+    Route::get('admin/article/edit', 'Api\ArticleController@articleEdit');//修改文章
+
 });

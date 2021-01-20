@@ -23,7 +23,7 @@ class IndexController extends Controller
         print_r(csrf_token());
     }
 
-		/**
+    /**
      * 注册
      * @param Request $request
      * @return \Illuminate\Http\JsonResponse
@@ -42,36 +42,36 @@ class IndexController extends Controller
         $user->save();
 
         return $this->success(['csrf_token' => csrf_token()]);
-		}
-		
-		/**
-		 * 登录
-		 * @param Request $request
-		 * @return void
-		 */
+    }
+	
+    /**
+     * 登录
+     * @param Request $request
+     * @return void
+     */
     public function login (Request $request) {
         // 用户登录逻辑
         $this->validate($request, [
             'username ' => 'string',
             'password' => 'required|min:6|max:50',
-				]);
-				
-				$user = AdminUser::where('username', $request['username'])
-						->first();
+        ]);
 
-				$password = password_verify($request['password'], $user['password']);
+        $user = AdminUser::where('username', $request['username'])
+            ->first();
+
+        $password = password_verify($request['password'], $user['password']);
 
         if (!$password) {
             return $this->fail('Invalid username or Password');
-				}
-				
-				$request->session()->put('loginInfo', [
-						'admin_id' => $user['id'],
-						'username' => $user['username'],
-						'rules'    => [],
-				]);
+        }
 
-				return $this->success(['csrf_token' => csrf_token()]);
+        $request->session()->put('loginInfo', [
+            'admin_id' => $user['id'],
+            'username' => $user['username'],
+            'rules'    => [],
+        ]);
+
+        return $this->success(['csrf_token' => csrf_token()]);
     }
 
 }
