@@ -14,3 +14,13 @@
 Route::get('/', function () {
     return view('welcome');
 });
+
+//api
+Route::prefix('api/')->group(function () {
+    Route::get('test', 'Api\IndexController@index');
+    Route::post('post', 'Api\IndexController@testPost');
+
+    Route::post('admin/register', 'Api\IndexController@register');//注册
+    Route::post('admin/login', 'Api\IndexController@login');//登录
+
+});

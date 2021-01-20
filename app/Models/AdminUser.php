@@ -7,7 +7,7 @@ use Illuminate\Database\Eloquent\Model;
 use Tymon\JWTAuth\Contracts\JWTSubject;
 use Illuminate\Foundation\Auth\User as Authenticatable;
 
-class User extends Authenticatable implements JWTSubject
+class AdminUser extends Model
 {
 
     protected $table = 'blog_admin';
@@ -18,13 +18,14 @@ class User extends Authenticatable implements JWTSubject
 
     private static $instance;
 
-    public function getJWTIdentifier()
+    public static function getInstance()
     {
-        return $this->getKey();
+        if(!self::$instance) {
+            self::$instance = new self();
+        }
+
+        return self::$instance;
     }
 
-    public function getJWTCustomClaims()
-    {
-        return [];
-    }
+	
 }
