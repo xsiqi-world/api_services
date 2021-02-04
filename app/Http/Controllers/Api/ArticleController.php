@@ -41,7 +41,7 @@ class ArticleController extends Controller
             ->when(!empty($categoryId), function ($query) use ($categoryId) {
                 return $query->where('blog_article.category_id', $categoryId);
             })
-            ->where('is_delete', 0)
+            ->where('blog_article.is_delete', 0)
             ->simplePaginate(15)
             ->toArray();
 
