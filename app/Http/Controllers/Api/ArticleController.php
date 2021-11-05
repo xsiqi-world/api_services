@@ -17,7 +17,7 @@ class ArticleController extends Controller
      */
     public function categoryList (Request $request) {
         $category = Category::getInstance()
-            ->simplePaginate(15)
+            ->simplePaginate(20)
             ->toArray();
 
         $data['data'] = $category['data'];
@@ -32,22 +32,31 @@ class ArticleController extends Controller
      */
     public function articleList (Request $request) {
         $this->validate($request, [
-            'category_id' => 'nullable|integer'
+            'category_id' => 'nullable|integer',
+            'keyword' => 'nullable|string'
         ]);
+        $limit = $request['limit'] ?? 20;
         $categoryId = $request['category_id'] ?? '';
+        $keyword = $request['keyword'] ?? '';
 
-        $category = Article::getInstance()->select('blog_article.id', 'category.name as category_name', 'category.icon', 'blog_article.title', 'blog_article.description', 'blog_article.access_num', DB::raw("date_format(from_unixtime(create_time),'%Y-%m-%d %H:%i:%s') as create_time"))
+        $article = Article::getInstance()->select('blog_article.id', 'category.name as category_name', 'category.icon', 'blog_article.title', 'blog_article.description', 'blog_article.access_num', DB::raw("date_format(from_unixtime(create_time),'%Y-%m-%d %H:%i:%s') as create_time"))
             ->leftJoin('blog_category as category', 'blog_article.category_id', '=', 'category.id')
             ->when(!empty($categoryId), function ($query) use ($categoryId) {
                 return $query->where('blog_article.category_id', $categoryId);
             })
+            ->when(!empty($keyword), function ($query) use ($keyword) {
+                return $query->where(function ($query) use ($keyword) {
+                    return $query->where('blog_article.title', 'like', $keyword . '%')
+                        ->orWhere('blog_article.description', 'like', $keyword . '%');
+                });
+            })
             ->where('blog_article.is_delete', 0)
-            ->simplePaginate(15)
+            ->paginate($limit)
             ->toArray();
 
-        $data['data'] = $category['data'];
-        $data['total'] = $category['to'];
-        return $this->success($data);
+        $data['data'] = $article['data'];
+        $data['total'] = $article['total'];
+        return $this->success($article);
     }
 
     /**
@@ -97,7 +106,7 @@ class ArticleController extends Controller
         } catch (\Exception $e) {
             info($e->getMessage());
             DB::connection('mysql')->rollback();// 事务回滚
-            $this->fail();
+            return $this->fail();
         }
         
     }
@@ -130,7 +139,7 @@ class ArticleController extends Controller
         } catch (\Exception $e) {
             info($e->getMessage());
             DB::connection('mysql')->rollback();// 事务回滚
-            $this->fail();
+            return $this->fail();
         }
         
     }
@@ -154,7 +163,7 @@ class ArticleController extends Controller
         } catch (\Exception $e) {
             info($e->getMessage());
             DB::connection('mysql')->rollback();// 事务回滚
-            $this->fail();
+            return $this->fail();
         }
 
     }
