@@ -42,7 +42,7 @@ Route::middleware('jwt.api.auth')->prefix('api/admin/')->group(function () {
     Route::post('rule/update', 'Api\RuleController@ruleUpdate'); // 修改权限
     Route::get('rule/delete', 'Api\RuleController@ruleDelete'); // 删除权限
 
-    Route::get('role/list', 'Api\RuleController@roleList'); // 查询权限
+    Route::get('role/list', 'Api\RoleController@roleList'); // 查询权限
     Route::post('role/save', 'Api\RoleController@roleSave'); // 添加角色
     Route::post('role/update', 'Api\RoleController@roleUpdate'); // 修改角色
     Route::get('role/delete', 'Api\RoleController@roleDelete'); // 删除角色
