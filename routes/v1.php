@@ -18,3 +18,10 @@ use Illuminate\Http\Request;
 // });
 
 Route::get('index', 'V1\IndexController@index');
+
+// 用户验证
+//Route::post('register', 'Api\UserController@register');//注册
+//Route::post('login', 'Api\UserController@login');//登录
+//Route::get('logout', 'Api\UserController@logout');//退出
+//Route::get('user', 'Api\UserController@getAuthUser')->middleware('jwt.api.auth');//用户信息
+

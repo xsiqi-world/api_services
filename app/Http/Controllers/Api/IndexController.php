@@ -14,7 +14,7 @@ class IndexController extends Controller
             'username' => 2,
             'rules'    => [],
         ]);
-        
+
         print_r(csrf_token());
     }
 
@@ -43,7 +43,7 @@ class IndexController extends Controller
 
         return $this->success(['csrf_token' => csrf_token()]);
     }
-	
+
     /**
      * 登录
      * @param Request $request
@@ -59,9 +59,9 @@ class IndexController extends Controller
         $user = AdminUser::where('username', $request['username'])
             ->first();
 
-        $password = password_verify($request['password'], $user['password']);
+        $pwdEquality = password_verify($request['password'], $user['password']);
 
-        if (!$password) {
+        if (!$pwdEquality) {
             return $this->fail('Invalid username or Password');
         }
 

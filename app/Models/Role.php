@@ -4,13 +4,10 @@ namespace App\Models;
 
 use Illuminate\Database\Eloquent\Model;
 
-use Tymon\JWTAuth\Contracts\JWTSubject;
-use Illuminate\Foundation\Auth\User as Authenticatable;
-
-class AdminUser extends Model
+class Role extends Model
 {
-
-    protected $table = 'admin_user';
+    //
+    protected $table = 'admin_role';
     public $timestamps = false;
 
     // 数据库主键
@@ -26,6 +23,4 @@ class AdminUser extends Model
 
         return self::$instance;
     }
-
-
 }
